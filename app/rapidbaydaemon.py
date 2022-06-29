@@ -4,6 +4,7 @@ import os
 import shutil
 import time
 from threading import Thread
+from app.settings import SKIP_CONVERSION
 
 import http_cache
 import log
@@ -60,7 +61,7 @@ def _subtitle_indexes(h, filename):
 def _get_output_filepath(magnet_hash, filepath):
     extension = os.path.splitext(filepath)[1][1:]
     is_video = extension in settings.VIDEO_EXTENSIONS
-    output_extension = "mp4" if is_video else extension
+    output_extension = "mp4" if is_video and not settings.SKIP_CONVERSION else extension
     return (
         os.path.splitext(
             os.path.join(settings.OUTPUT_DIR, magnet_hash, os.path.basename(filepath))
@@ -255,7 +256,7 @@ class RapidBayDaemon:
                 if subtitle_download_status == SubtitleDownloadStatus.DOWNLOADING:
                     return dict(status=FileStatus.DOWNLOADING_SUBTITLES)
                 if subtitle_download_status == SubtitleDownloadStatus.FINISHED:
-                    return dict(status=FileStatus.WAITING_FOR_CONVERSION)
+                    return dict(status=FileStatus.READY_TO_COPY if settings.SKIP_CONVERSION else FileStatus.WAITING_FOR_CONVERSION )
             else:
                 return dict(status=FileStatus.READY_TO_COPY)
             return dict(status=FileStatus.DOWNLOAD_FINISHED)

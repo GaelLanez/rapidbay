@@ -34,6 +34,7 @@ MOVE_RESULTS_TO_BOTTOM_CONTAINING_STRINGS=["x265","XviD", "HEVC"]
 SUBTITLE_LANGUAGES = ["en"]  # list of languages, e.g. ["en", "de", "es"]
 
 # CONVERSION
+SKIP_CONVERSION = True
 CONVERT_VIDEO = True
 VIDEO_CONVERSION_PARAMS = "libx264 -preset ultrafast"
 OUTPUT_DIR = "/tmp/output/"
